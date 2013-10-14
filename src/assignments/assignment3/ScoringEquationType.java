@@ -18,7 +18,7 @@ import org.grouplens.lenskit.core.Parameter;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 @Qualifier
-@Parameter(IRatingEquation.class)
-public @interface RatingEquationType {
+@Parameter(IScoringEquation.class)
+public @interface ScoringEquationType {
 
 }

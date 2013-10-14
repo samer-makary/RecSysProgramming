@@ -9,7 +9,7 @@ import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
  * @author Samer Meggaly
  * 
  */
-public interface IRatingEquation {
+public interface IScoringEquation {
 
 	/**
 	 * The function computes the value of the rating equation for a given user

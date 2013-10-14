@@ -20,5 +20,5 @@ import org.grouplens.lenskit.core.Parameter;
 @Target(ElementType.PARAMETER)
 @Qualifier
 @Parameter(Integer.class)
-public @interface NeighborhoodSize {
+public @interface NeighborhoodSizeType {
 }

@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 import org.grouplens.lenskit.core.Parameter;
-import org.grouplens.lenskit.vectors.similarity.VectorSimilarity;
 
 /**
  * Parameter annotation for user-user collaborative filtering neighborhood selection
@@ -19,7 +18,7 @@ import org.grouplens.lenskit.vectors.similarity.VectorSimilarity;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 @Qualifier
-@Parameter(VectorSimilarity.class)
+@Parameter(IUserUserSimilarityMeasure.class)
 public @interface UserUserSimilarityMeasureType {
 
 }

@@ -10,7 +10,6 @@ import org.grouplens.lenskit.data.dao.UserDAO;
 import org.grouplens.lenskit.data.dao.UserEventDAO;
 import org.grouplens.lenskit.vectors.MutableSparseVector;
 import org.grouplens.lenskit.vectors.VectorEntry;
-import org.grouplens.lenskit.vectors.similarity.VectorSimilarity;
 
 /**
  * User-user item scorer.
@@ -19,19 +18,19 @@ import org.grouplens.lenskit.vectors.similarity.VectorSimilarity;
 public class SimpleUserUserItemScorer extends AbstractItemScorer {
     // the following fields will be used to find the user neighborhood
     // and compute the rating (scoring) equation between a user and an item
-    private final IRatingEquation ratingEqu;
+    private final IScoringEquation ratingEqu;
     private final UserDAO userDAO;
     private final UserEventDAO userEventDAO;
-    private final VectorSimilarity vecSim;
+    private final IUserUserSimilarityMeasure vecSim;
     private final int N;
 
 	@Inject
 	public SimpleUserUserItemScorer(
 			UserDAO userDAO,
 			UserEventDAO userEventDAO,
-			@RatingEquationType IRatingEquation ratingEquation,
-			@UserUserSimilarityMeasureType VectorSimilarity uuSimilarityMeasure,
-			@NeighborhoodSize Integer neighborhoodSize) {
+			@ScoringEquationType IScoringEquation ratingEquation,
+			@UserUserSimilarityMeasureType IUserUserSimilarityMeasure uuSimilarityMeasure,
+			@NeighborhoodSizeType Integer neighborhoodSize) {
 		
 		this.userDAO = userDAO;
 		this.userEventDAO = userEventDAO;

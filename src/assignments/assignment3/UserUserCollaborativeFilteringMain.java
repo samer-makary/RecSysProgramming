@@ -14,6 +14,7 @@ import org.grouplens.lenskit.data.dao.ItemDAO;
 import org.grouplens.lenskit.data.dao.UserDAO;
 import org.grouplens.lenskit.vectors.SparseVector;
 import org.grouplens.lenskit.vectors.similarity.CosineVectorSimilarity;
+import org.grouplens.lenskit.vectors.similarity.VectorSimilarity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,10 +49,16 @@ public class UserUserCollaborativeFilteringMain {
      * @param args The <tt>user:item</tt> pairs to score.
      */
     public static void main(String[] args) {
+    	String inputString = "";
+		inputString += "1024:77, 1024:268, 1024:462, 1024:393, 1024:36955, "
+				+ "2048:77, 2048:36955, 2048:788, "
+				+ "4430:107, 4430:424, 4430:629, 4430:602, 4430:672, "
+				+ "3575:22,3575:745,3575:36658,3575:38, 3575:13, "
+				+ "5219:1894,5219:105,5219:808,5219:581,5219:1900, "
+				+ "1259:12,1259:603,1259:114 ,1259:180,1259:2502, "
+				+ "3968:597,3968:8587,3968:105,3968:36955,3968:36658";
     	
-		args = new String[] { "1024:77", "1024:268", "1024:462", "1024:393",
-				"1024:36955", "2048:77", "2048:36955", "2048:788" };
-		
+		args = inputString.split(",");
     	
         Map<Long,Set<Long>> toScore = parseArgs(args);
 
@@ -74,7 +81,7 @@ public class UserUserCollaborativeFilteringMain {
         for (Map.Entry<Long,Set<Long>> scoreRequest: toScore.entrySet()) {
             long user = scoreRequest.getKey();
             Set<Long> items = scoreRequest.getValue();
-            logger.info("scoring {} items for user {}", items.size(), user);
+            System.out.printf(">>> scoring %d item(s) for User %d\n", items.size(), user);
             // We call the score method that takes a set of items.
             // AbstractItemScorer delegates this method to the one you are supposed to implement.
             SparseVector scores = scorer.score(user, items);
@@ -88,6 +95,7 @@ public class UserUserCollaborativeFilteringMain {
                 String title = titleDAO.getItemTitle(item);
                 System.out.format("%d,%d,%s,%s\n", user, item, score, title);
             }
+            System.out.println();
         }
     }
 
@@ -100,7 +108,7 @@ public class UserUserCollaborativeFilteringMain {
         Pattern pat = Pattern.compile("(\\d+):(\\d+)");
         Map<Long, Set<Long>> map = Maps.newHashMap();
         for (String arg: args) {
-            Matcher m = pat.matcher(arg);
+            Matcher m = pat.matcher(arg.trim());
             if (m.matches()) {
                 long uid = Long.parseLong(m.group(1));
                 long iid = Long.parseLong(m.group(2));
@@ -143,14 +151,17 @@ public class UserUserCollaborativeFilteringMain {
         config.set(UserFile.class)
               .to(new File(UserUserCollaborativeFilteringMain.USERS));
         
+        config.bind(VectorSimilarity.class)
+        	  .to(CosineVectorSimilarity.class);
+        
         // use the TF-IDF scorer you will implement to score items
         config.bind(ItemScorer.class)
               .to(SimpleUserUserItemScorer.class);
-        config.set(RatingEquationType.class)
-        	  .to(MeanCenteredWeightedAverageRating.class);
+        config.set(ScoringEquationType.class)
+        	  .to(MeanCenteredWeightedAverageScoring.class);
         config.set(UserUserSimilarityMeasureType.class)
-        	  .to(new CosineVectorSimilarity());
-        config.set(NeighborhoodSize.class)
+        	  .to(MeanCenteredUUSimilarity.class);
+        config.set(NeighborhoodSizeType.class)
         	  .to(new Integer(30));
         
         return config;

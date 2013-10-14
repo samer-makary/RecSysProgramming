@@ -14,13 +14,13 @@ import org.grouplens.lenskit.data.history.RatingVectorUserHistorySummarizer;
 import org.grouplens.lenskit.data.history.UserHistory;
 import org.grouplens.lenskit.vectors.SparseVector;
 
-public class MeanCenteredWeightedAverageRating implements IRatingEquation {
+public class MeanCenteredWeightedAverageScoring implements IScoringEquation {
 	
 	private final UserEventDAO userEventDAO;
 	private Long2DoubleMap usersMeanRating;
 	
 	@Inject
-	public MeanCenteredWeightedAverageRating(UserEventDAO userEventDAO,
+	public MeanCenteredWeightedAverageScoring(UserEventDAO userEventDAO,
 			UserDAO userDAO) {
 		this.userEventDAO = userEventDAO;
 		computeSystemUsersMeanRating(userDAO);
