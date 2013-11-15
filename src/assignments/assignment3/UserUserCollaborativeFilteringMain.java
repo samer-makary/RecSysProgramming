@@ -160,7 +160,7 @@ public class UserUserCollaborativeFilteringMain {
         config.set(ScoringEquationType.class)
         	  .to(MeanCenteredWeightedAverageScoring.class);
         config.set(UserUserSimilarityMeasureType.class)
-        	  .to(MeanCenteredUUSimilarity.class);
+        	  .to(BasicUUSimilarity.class);
         config.set(NeighborhoodSizeType.class)
         	  .to(new Integer(30));
         
